@@ -15,7 +15,7 @@ Dim asuFlg
 Dim asatteFlg
 Dim shiasatteFlg	'ADD NEW 2024.04.01	<--- エイプリルフールやで
 Dim teleworkFlg		'ADD NEW 2024.08.06 <--- 広島の日やで
-Dim mimeiFlg		'ADD NEW 2024.08.16 <--- 御施餓鬼の日やで（阿難尊者の御母堂やがな。意味深長すぎるがな。おんぼうじしった ぼだはだやみー）
+Dim mimeiFlg		'ADD NEW 2024.08.16 <--- 御施餓鬼の日やで（目連尊者の御母堂やがな。意味深長すぎるがな。おんぼうじしった ぼだはだやみー）
 Dim searchStr		'【在宅】文字列
 '曜日はいちオリジンで1～7になる
 Dim arrayWeekDay(8)
@@ -97,7 +97,7 @@ For Each objFile In objFolder.Files
 		' ADD NEW 2024.08.16 --- Start
 		mimeiFlg = -1
 		mimeiFlg = findMimeiStart(objFile.Name)		'開始時刻が未明のものがあるかチェック
-		if mimeiFlg = 0 Then						'明日未明開始は本日対応を要する（テレワークでない限り）
+		If mimeiFlg = 0 Then						'明日未明開始は本日対応を要する（テレワークでない限り）
 			objText.WriteLine("☆☆明　日日付のファイル（" & objFile.Name & "）に未明開始の記載あり。本日対応を要する可能性大につき記載事項を確認すること！☆☆")
 		End If
 		' ADD NEW 2024.08.16 --- End
@@ -115,7 +115,7 @@ For Each objFile In objFolder.Files
 		' ADD NEW 2024.08.16 --- Start
 		mimeiFlg = -1
 		mimeiFlg = findMimeiStart(objFile.Name)		'開始時刻が未明のものがあるかチェック
-		if mimeiFlg = 0 Then
+		If mimeiFlg = 0 Then
 			objText.WriteLine("★明後日日付のファイル（" & objFile.Name & "）に未明開始の記載あり。記載事項を確認すること！★")
 		End If
 		' ADD NEW 2024.08.16 --- End
@@ -132,7 +132,7 @@ For Each objFile In objFolder.Files
 		' ADD NEW 2024.08.16 --- Start
 		mimeiFlg = -1
 		mimeiFlg = findMimeiStart(objFile.Name)		'開始時刻が未明のものがあるかチェック
-		if mimeiFlg = 0 Then
+		If mimeiFlg = 0 Then
 			objText.WriteLine("★明々後日日付のファイル（" & objFile.Name & "）に未明開始の記載あり。記載事項を確認すること！★")
 		End If
 		' ADD NEW 2024.08.16 --- End
@@ -147,14 +147,14 @@ For Each objFile In objFolder.Files
 			If teleworkFlg = 0 Then
 				objText.WriteLine("☆範囲外日付のファイル（" & objFile.Name & "）にテレワークする旨の記載あり。記載事項を確認すること！☆")
 			End If
-		' ADD NEW 2024.08.06 --- End
-		' ADD NEW 2024.08.16 --- Start
-		mimeiFlg = -1
-		mimeiFlg = findMimeiStart(objFile.Name)		'開始時刻が未明のものがあるかチェック
-		if mimeiFlg = 0 Then
-			objText.WriteLine("★範囲外日付のファイル（" & objFile.Name & "）に未明開始の記載あり。記載事項を確認すること！★")
-		End If
-		' ADD NEW 2024.08.16 --- End
+			' ADD NEW 2024.08.06 --- End
+			' ADD NEW 2024.08.16 --- Start
+			mimeiFlg = -1
+			mimeiFlg = findMimeiStart(objFile.Name)		'開始時刻が未明のものがあるかチェック
+			if mimeiFlg = 0 Then
+				objText.WriteLine("★範囲外日付のファイル（" & objFile.Name & "）に未明開始の記載あり。記載事項を確認すること！★")
+			End If
+			' ADD NEW 2024.08.16 --- End
 			taishougaiFlg = 0	'UPDATE --- 2024.05.08
 		End If
 	End if
