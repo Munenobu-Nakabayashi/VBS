@@ -183,16 +183,16 @@ Else	'金曜日(6)以外である
 		objText.WriteLine("☆本日、明　日分の対応は不要（※明日が祝日ではない事。および未明勤務開始有無を確認する事）☆")
 	End If
 	if asatteFlg = 0 Then	'明後日（木曜日の明後日は土曜日）
-		If WeekDay(Date()) = 5 Then	'UPDATE --- 2024.06.13 木曜日時点において明後日である土曜日のファイルが既に格納済みの場合の対応
+		If WeekDay(Date()) = 5 Then	'UPDATE --- 2024.06.13 木曜日時点において明後日である土曜日のファイルが既に格納済みの場合の記述
 			objText.WriteLine("☆本日、明後日の土曜日分の対応は不要（★明日金曜日に対応する事★）☆")
 		Else
 			objText.WriteLine("☆本日、明後日分の対応は不要（※明後日に対応する事）☆")
 		End If
 	End if
-	if shiasatteFlg = 0 Then	'木曜の明々後日は日曜日、水曜日の明々後日は水曜日である
-		If WeekDay(Date()) = 5 Then	'UPDATE --- 2024.06.13 木曜日時点において明々後日である日曜日のファイルが既に格納済みの場合の対応
+	if shiasatteFlg = 0 Then	'木曜の明々後日は日曜日、水曜日の明々後日は土曜日である
+		If WeekDay(Date()) = 5 Then	'UPDATE --- 2024.06.13 木曜日時点において明々後日である日曜日のファイルが既に格納済みの場合の記述
 			objText.WriteLine("☆本日、明々後日の日曜日分の対応は不要（★明日金曜日に対応する事★）☆")
-		ElseIf WeekDay(Date()) = 4 Then	'UPDATE --- 2024.06.13 水曜日時点において明々後日である土曜日のファイルが既に格納済みの場合の対応
+		ElseIf WeekDay(Date()) = 4 Then	'UPDATE --- 2024.06.13 水曜日時点において明々後日である土曜日のファイルが既に格納済みの場合の記述
 			objText.WriteLine("☆本日、明々後日の土曜日分の対応は不要（★明後日金曜日に対応する事★）☆")
 		Else
 			objText.WriteLine("☆本日、明々後日分の対応は不要（明々後日に対応する事）☆")
@@ -233,8 +233,6 @@ Function findTelework(ByVal fileName)
 	'ADD NEW 2024.08.06 --- Start
 	Dim i
 	Dim ret
-
-	'Const xlValues = -4163	'意味不明なるも転用する
 
 	Set objExcelApp = CreateObject("Excel.Application")
 	'objExcelApp.Visible = True
@@ -303,6 +301,5 @@ Function findMimeiStart(ByVal fileName)
 	objExcelApp.Workbooks.Close
 	Set objExcelApp = Nothing
 	'ADD NEW 2024.08.16 --- End
-
 End Function
 'End
