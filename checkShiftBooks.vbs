@@ -15,8 +15,9 @@ Dim asuFlg
 Dim asatteFlg
 Dim shiasatteFlg	'ADD NEW 2024.04.01	<--- エイプリルフールやで
 Dim teleworkFlg		'ADD NEW 2024.08.06 <--- 広島の日やで
-Dim mimeiFlg		'ADD NEW 2024.08.16 <--- 御施餓鬼の日やで（目連尊者の御母堂やがな。意味深長すぎるがな。おんぼうじしった ぼだはだやみー）
+Dim mimeiFlg		'ADD NEW 2024.08.16 <--- 施餓鬼の日やで（出来過ぎやがな。おんぼうじしった ぼだはだやみー）
 Dim searchStr		'【在宅】文字列
+
 '曜日はいちオリジンで1～7になる
 Dim arrayWeekDay(8)
 arrayWeekDay(0) = ""
@@ -83,6 +84,9 @@ For Each objFile In objFolder.Files
 		End If
 		' ADD NEW 2024.08.06 --- End
 		' ※本日日付ファイルにおける未明開始チェックは実施しない。理由は実際のチェック実施時刻が16:00であり、既に過去った時間帯であるため
+		If checkBlankSheet(objFile.Name) = True Then	'ADD NEW 2024.09.11 --- Start 空白シートか否かをチェック
+			objText.WriteLine("◎本　日日付のファイル（" & objFile.Name & "）はブランクである可能性あり。テーブルの記載を確認すること◎")
+		End If											'ADD NEW 2024.09.11 --- End
 		kyouFlg = 0
 	'End if
 	ElseIf InStr(workFileName, asu) > 0 Then
@@ -98,9 +102,14 @@ For Each objFile In objFolder.Files
 		mimeiFlg = -1
 		mimeiFlg = findMimeiStart(objFile.Name)		'開始時刻が未明のものがあるかチェック
 		If mimeiFlg = 0 Then						'明日未明開始は本日対応を要する（テレワークでない限り）
-			objText.WriteLine("☆☆明　日日付のファイル（" & objFile.Name & "）に未明開始の記載あり。本日対応を要する可能性大につき記載事項を確認すること！☆☆")
+			objText.WriteLine("☆★明　日日付のファイル（" & objFile.Name & "）に未明開始の記載あり。本日対応を要する可能性大につき記載事項を確認すること！★☆")
+		Else	'ADD NEW 2024.09.11 --- 明日日付だが未明開始でない場合は対処不要（9.11の日やで。やり過ぎやで）
+			objText.WriteLine("☆明　日日付のファイル（" & objFile.Name & "）に未明開始の記載がない。よって本日は対応不要。但し念の為記載内容を確認すること。☆")	' ADD NEW 2024.09.11 --- End
 		End If
 		' ADD NEW 2024.08.16 --- End
+		If checkBlankSheet(objFile.Name) = True Then	'ADD NEW 2024.09.11 --- Start 空白シートか否かをチェック
+			objText.WriteLine("◎明　日日付のファイル（" & objFile.Name & "）はブランクである可能性あり。テーブルの記載を確認すること◎")
+		End If											'ADD NEW 2024.09.11 --- End
 		asuFlg = 0
 	'End if
 	ElseIf InStr(workFileName, asatte) > 0 Then
@@ -119,6 +128,9 @@ For Each objFile In objFolder.Files
 			objText.WriteLine("★明後日日付のファイル（" & objFile.Name & "）に未明開始の記載あり。記載事項を確認すること！★")
 		End If
 		' ADD NEW 2024.08.16 --- End
+		If checkBlankSheet(objFile.Name) = True Then	'ADD NEW 2024.09.11 --- Start 空白シートか否かをチェック
+			objText.WriteLine("◎明後日日付のファイル（" & objFile.Name & "）はブランクである可能性あり。テーブルの記載を確認すること◎")
+		End If											'ADD NEW 2024.09.11 --- End
 		asatteFlg = 0
 	ElseIf InStr(workFileName, shiasatte) > 0 Then	'ADD NEW 2024.04.01
 		objText.WriteLine("明々後日日付のファイル:" & objFile.Name)
@@ -136,6 +148,9 @@ For Each objFile In objFolder.Files
 			objText.WriteLine("★明々後日日付のファイル（" & objFile.Name & "）に未明開始の記載あり。記載事項を確認すること！★")
 		End If
 		' ADD NEW 2024.08.16 --- End
+		If checkBlankSheet(objFile.Name) = True Then	'ADD NEW 2024.09.11 --- Start 空白シートか否かをチェック
+			objText.WriteLine("◎明々後日日付のファイル（" & objFile.Name & "）はブランクである可能性あり。テーブルの記載を確認すること◎")
+		End If											'ADD NEW 2024.09.11 --- End
 		shiasatteFlg = 0
 	Else	'本日、明日、明後日、明々後日以降のExcelファイルを範囲外日付と見なす
 		If InStr(workFileName, ".xlsx") > 0 Then
@@ -155,6 +170,9 @@ For Each objFile In objFolder.Files
 				objText.WriteLine("★範囲外日付のファイル（" & objFile.Name & "）に未明開始の記載あり。記載事項を確認すること！★")
 			End If
 			' ADD NEW 2024.08.16 --- End
+			If checkBlankSheet(objFile.Name) = True Then	'ADD NEW 2024.09.11 --- Start 空白シートか否かをチェック
+				objText.WriteLine("◎範囲外日付のファイル（" & objFile.Name & "）はブランクである可能性あり。テーブルの記載を確認すること◎")
+			End If											'ADD NEW 2024.09.11 --- End
 			taishougaiFlg = 0	'UPDATE --- 2024.05.08
 		End If
 	End if
@@ -301,5 +319,19 @@ Function findMimeiStart(ByVal fileName)
 	objExcelApp.Workbooks.Close
 	Set objExcelApp = Nothing
 	'ADD NEW 2024.08.16 --- End
+End Function
+
+Function checkBlankSheet(ByVal fileName)
+
+	Set objExcelApp = CreateObject("Excel.Application")
+	objExcelApp.Visible = False
+	objExcelApp.Workbooks.Open(strPath & "\" & fileName)
+	WScript.Sleep 3000	'3秒待機
+
+	checkBlankSheet = IsEmpty(objExcelApp.WorkSheets("届出").Range("C7:C31"))	'【氏名】列全域が空白である場合はブランクファイルと見なす
+
+	objExcelApp.Workbooks.Close
+	Set objExcelApp = Nothing
+
 End Function
 'End
